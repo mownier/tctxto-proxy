@@ -9,7 +9,7 @@ build:
 	cd grpc-web/go/grpcwebproxy && go build && cd ../../../
 
 run:
-	cd grpc-web/go/grpcwebproxy && go build && ./grpcwebproxy --run_tls_server=false --backend_addr=$(BA) --server_http_debug_port=$(DP) --allowed_origins=$(AO) && cd ../../../
+	cd grpc-web/go/grpcwebproxy && go build && ./grpcwebproxy --run_tls_server=true --server_tls_cert_file=./cert.pem --server_tls_key_file=./decrypted_key.pem  --backend_addr=$(BA) --server_http_debug_port=$(DP) --allowed_origins=$(AO) && cd ../../../
 
 help:
 	@echo ""
