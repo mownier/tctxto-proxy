@@ -1,6 +1,8 @@
 # macOS
 .DS_Store
 
+grpcwebproxy
 tctxtopx
+tctxtopx.exe
 
 build/
