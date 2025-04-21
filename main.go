@@ -6,6 +6,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
@@ -28,19 +29,25 @@ func main() {
 		log.Fatalln("unable to determine local IP")
 	}
 
+	emptyEnvVars := []string{}
+
 	backendAddr := os.Getenv("TCTXTO_PROXY_BA")
 	if len(backendAddr) == 0 {
-		backendAddr = fmt.Sprintf("%s:3232", localIP)
+		emptyEnvVars = append(emptyEnvVars, fmt.Sprintf("set environment variable TCTXTO_PROXY_BA (e.g. export TCTXTO_PROXY_BA=%s:3232)", localIP))
+	}
+
+	allowedOrigins := os.Getenv("TCTXTO_PROXY_AO")
+	if len(allowedOrigins) == 0 {
+		emptyEnvVars = append(emptyEnvVars, fmt.Sprintf("set environment variable TCTXTO_PROXY_AO (e.g. export TCTXTO_PROXY_AO=http://%s:2323)", localIP))
+	}
+
+	if len(emptyEnvVars) > 0 {
+		log.Fatalf("encountered problem(s): %s\n", strings.Join(emptyEnvVars, ", "))
 	}
 
 	debugPort := os.Getenv("TCTXTO_PROXY_DP")
 	if len(debugPort) == 0 {
 		debugPort = "2121"
-	}
-
-	allowedOrigins := os.Getenv("TCTXTO_PROXY_AO")
-	if len(allowedOrigins) == 0 {
-		allowedOrigins = fmt.Sprintf("http://%s:2323", localIP)
 	}
 
 	log.Printf("tctxto proxy running on http://%s:%s\n", localIP, debugPort)
