@@ -1,25 +1,17 @@
-BA=localhost:3232
-DP=2121
-AO=
+build-macos:
+	GOOS=darwin GOARCH=amd64 go build -o build/macos/tctxto && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy build/macos/
 
-clone:
-	git clone https://github.com/improbable-eng/grpc-web.git
+build-linux:
+	GOOS=linux GOARCH=amd64 go build -o build/linux/tctxto && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy build/linux/
 
-build:
-	cd grpc-web/go/grpcwebproxy && go build && cd ../../../
+build-windows:
+	GOOS=windows GOARCH=amd64 go build -o build/windows/tctxto.exe && cd libs/grpc-web/go/grpcwebproxy && go build -o grpcwebproxy.exe && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy.exe build/windows/
+
+build-all: build-macos build-linux build-windows
 
 run:
-	cd grpc-web/go/grpcwebproxy && go build && ./grpcwebproxy --run_tls_server=true --server_tls_cert_file=./cert.pem --server_tls_key_file=./decrypted_key.pem  --backend_addr=$(BA) --server_http_debug_port=$(DP) --allowed_origins=$(AO) && cd ../../../
+	go build -o build/snapshot/tctxto && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy build/snapshot/ && cd build/snapshot && ./tctxto
 
-help:
-	@echo ""
-	@echo "Usage:"
-	@echo "  make clone - clone the dependency"
-	@echo "  make build - creates executable from the dependency"
-	@echo "  make run   - run the executable"
-	@echo ""
-	@echo "make run BA=0.0.0.0:9090 DP=7878 AO=http://localhost:2323"
-	@echo "  BA = backend addresss, default 0.0.0.0:3232"
-	@echo "  DP = server http debug port, default 2121"
-	@echo "  AO = allowed origins, any urls that want to connect, comma separated, must be set"
-	@echo ""
+# for windows
+run-w:
+	go build -o build/snapshot/tctxto.exe && cd libs/grpc-web/go/grpcwebproxy && go build -o grpcwebproxy.exe && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy.exe build/snapshot/ && cd build/snapshot && ./tctxto.exe
