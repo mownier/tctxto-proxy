@@ -9,6 +9,12 @@ build-windows:
 
 build-all: build-macos build-linux build-windows
 
+build:
+	go build -o tctxtopx && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy .
+
+build-w:
+	go build -o tctxtopx.exe && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy .
+
 run:
 	go build -o tctxtopx && cd libs/grpc-web/go/grpcwebproxy && go build && cd ../../../../ && mv libs/grpc-web/go/grpcwebproxy/grpcwebproxy . && ./tctxtopx
 
