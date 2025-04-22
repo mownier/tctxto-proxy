@@ -6,3 +6,5 @@ tctxtopx
 tctxtopx.exe
 
 build/
+
+vendor/
