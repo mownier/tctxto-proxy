@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -27,6 +29,11 @@ func main() {
 
 	if len(localIP) == 0 {
 		log.Fatalln("unable to determine local IP")
+	}
+
+	err = godotenv.Load()
+	if err != nil {
+		log.Fatalln("The .env file is not found. It should have TCTXTO_PROXY_BA=?, TCTXTO_PROXY_AO=?, and TCTXTO_PROXY_DP=2121.")
 	}
 
 	emptyEnvVars := []string{}
